@@ -1,6 +1,9 @@
 // g++ -std=c++17 -o serial_blocktilling serial_blocktilling.cpp
 // chmod +x serial_blocktilling
 // ./serial_blocktilling
+// https://en.wikipedia.org/wiki/Cache-oblivious_algorithm
+// https://stackoverflow.com/questions/15829223/loop-tiling-blocking-for-large-dense-matrix-multiplication
+// https://www.youtube.com/watch?v=GkHrgxdVrdo&ab_channel=VadimKarpusenko
 #include <iostream>
 #include <cstdint>
 #include <vector>
