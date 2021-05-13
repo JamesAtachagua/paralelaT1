@@ -13,8 +13,8 @@ int main(){
 	const uint64_t n=1 <<11;
 	const uint64_t l=1 <<11;
 
-    // 64 = common cache line size
-    const int cache_size = 64 / sizeof(float); 
+    // Get the size of a block with Cache size and size of float
+    const int block_size = 256 / sizeof(float);
 
 	// sum_k A_ik * B_kj = sum_k A_ik * B^t_jk = C_ij mxl
 	std::vector<float> A (m*l, 0); // mxl
@@ -24,44 +24,56 @@ int main(){
 
 	auto tstart = std::chrono::system_clock::now();
 
-	//multiplication
-	// for(uint64_t i=0;i< m; i++)
-	// 	for (uint64_t j = 0; j<n;j++){
-	// 		float accum = 0;
-	// 		for (uint64_t k = 0; k < l; k++)
-	// 			accum += A[i*l+k]*Bt[j*l+k];
-	// 		C[i*n+j] = accum;
-	// }
-
-    for (int i0 = 0; i0 < m; i0 += cache_size) {
-        int imax = i0 + cache_size > m ? m : i0 + cache_size;
-
-        for (int j0 = 0; j0 < n; j0 += cache_size) {
-            int jmax = j0 + cache_size > n ? n : j0 + cache_size;
-
-            for (int k0 = 0; k0 < l; k0 += cache_size) {
-                int kmax = k0 + cache_size > l ? l : k0 + cache_size;
-
-                for (int j1 = j0; j1 < jmax; ++j1) {
-                    int sj = n * j1;
-
-                    for (int i1 = i0; i1 < imax; ++i1) {
-                        int mi = n * i1;
-                        int ki = l * i1;
-                        int kij = ki + j1;
-
-                        for (int k1 = k0; k1 < kmax; ++k1) {
-                            C[kij] += A[mi + k1] * B[sj + k1];
-                        }
-                    }
+    /* Transpose by blocks */
+    /* Iterate by blocks of 256 */
+    for (int i = 0; i < n; i += block_size) {
+        for (int j = 0; j < n; j += block_size) {
+            /* transpose matrix */
+            for (int k = i; k < i + block_size; ++k) {
+                for (int l = j; l < j + block_size; ++l) {
+                    Bt[k + l*n] = B[l + k*n];
                 }
             }
         }
     }
 
-	auto tend = std::chrono::system_clock::now();
+	auto tstart_1 = std::chrono::system_clock::now();
+
+    /* Get the current block size */
+    for (int i0 = 0; i0 < m; i0 += block_size) {
+        int imax = i0 + block_size > m ? m : i0 + block_size;
+        /* Get the current block size */
+        for (int j0 = 0; j0 < n; j0 += block_size) {
+            int jmax = j0 + block_size > n ? n : j0 + block_size;
+            /* Get the current block size */
+            for (int k0 = 0; k0 < l; k0 += block_size) {
+                int kmax = k0 + block_size > l ? l : k0 + block_size;
+
+                /* Real multiplication */
+                for (int i = j0; i < jmax; ++i) {
+                    for (int j = i0; j < imax; ++j) {
+                        float accum = 0;
+                        for (int k = k0; k < kmax; ++k) {
+                            accum += A[i*l+k] * Bt[j*l+k];
+                            // accum += A[n*j+k] * Bt[n*i+k];
+                        }
+                        C[i*n + j] = accum;
+                        // C[l*j + i] = accum;
+                    }
+                }
+
+            }
+        }
+    }
+
+    auto tend = std::chrono::system_clock::now();
+
+	std::chrono::duration<float,std::milli> duration_trans = tstart_1 - tstart;
+	std::cout<< "Texec Transpose: " << duration_trans.count() << std::endl;
+
+	std::chrono::duration<float,std::milli> duration_mult = tend - tstart_1;
+	std::cout<< "Texec Multiplication: " << duration_mult.count() << std::endl;
 
 	std::chrono::duration<float,std::milli> duration = tend - tstart;
     std::cout<< "Texec total: " << duration.count() << std::endl;
-
 }
