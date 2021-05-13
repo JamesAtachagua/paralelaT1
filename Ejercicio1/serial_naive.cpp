@@ -6,6 +6,8 @@
 #include <vector>
 #include <chrono>
 
+using namespace std::chrono;
+
 int main(){
 
     /* 2^11 = 2048 and 2^12 = 4096 */ 
