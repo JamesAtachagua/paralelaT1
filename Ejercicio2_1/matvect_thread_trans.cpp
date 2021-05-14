@@ -13,6 +13,11 @@
 /* To set if execute with block tilling or not */
 #define TILLING       1
 
+/*
+primer punto => TRANS 1, TILLING 0
+segundo punto => TRANS 1, TILLING 1
+*/
+
 /* Set the maximun number of threads */
 /* 
 Para obtener el menor tiempo de ejecución seria usar tantos Thread
