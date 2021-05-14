@@ -6,6 +6,9 @@
 #include <vector>
 #include <chrono>
 
+/* To set if execute with block tilling or not */
+#define TILLING       1
+
 int main(){
 
     /* 2^11 = 2048 and 2^12 = 4096 */
@@ -31,10 +34,19 @@ int main(){
 	//multiplication
 	for(uint64_t i=0;i< m; i++)
 		for (uint64_t j = 0; j<n;j++){
-			float accum = 0;
-			for (uint64_t k = 0; k < l; k++)
-				accum += A[i*l+k]*Bt[j*l+k];
-			C[i*n+j] = accum;
+			#if TILLING
+				float accum = 0;
+			#endif
+			for (uint64_t k = 0; k < l; k++) {
+				#if TILLING
+					accum += A[i*l+k]*Bt[j*l+k];
+				#else
+					C[i*n+j] += A[i*l+k]*Bt[j*l+k];
+				#endif
+			}
+			#if TILLING
+				C[i*n+j] = accum;
+			#endif
 	}
 
 	auto tend = std::chrono::system_clock::now();
