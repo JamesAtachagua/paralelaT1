@@ -12,9 +12,9 @@
 int main(){
 
     /* 2^11 = 2048 and 2^12 = 4096 */
-	const uint64_t m=1 <<11;
-	const uint64_t n=1 <<11;
-	const uint64_t l=1 <<11;
+	const uint64_t m=1 <<12;
+	const uint64_t n=1 <<12;
+	const uint64_t l=1 <<12;
 
     // Get the size of a block with Cache size and size of float
     const int block_size = 256 / sizeof(float);
