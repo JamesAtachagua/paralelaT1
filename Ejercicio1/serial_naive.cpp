@@ -11,9 +11,9 @@ using namespace std::chrono;
 int main(){
 
     /* 2^11 = 2048 and 2^12 = 4096 */ 
-	const uint64_t m=1 <<11;
-	const uint64_t n=1 <<11;
-	const uint64_t l=1 <<11;
+	const uint64_t m=1 <<12;
+	const uint64_t n=1 <<12;
+	const uint64_t l=1 <<12;
 
 	// sum_k A_ik * B_kj = sum_k A_ik * B^t_jk = C_ij mxl
 	std::vector<float> A (m*l, 0); // mxl
