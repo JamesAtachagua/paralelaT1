@@ -7,9 +7,11 @@
 #include<pthread.h>
 
 /* To print the matrix */
-#define DEBUG       0
+#define DEBUG         0
 /* To set if execute with tranpose or not */
-#define TRANS       1
+#define TRANS         1
+/* To set if execute with block tilling or not */
+#define TILLING       1
 
 /* Set the maximun number of threads */
 /* 
@@ -59,15 +61,27 @@ void* multi(void* arg)
 
     //multiplication
 	for(uint64_t i = core * m / MAX_THREAD; i < (core + 1) * m / MAX_THREAD; i++) {
-		float accum = 0;
+		#if TILLING
+			float accum = 0;
+		#endif
 		for (uint64_t k = 0; k < l; k++) {
 			#if TRANS
-				accum += A[i*l + k] * Bt[k]; // with tranpose
+				#if TILLING
+					accum += A[i*l + k] * Bt[k]; // with tranpose
+				#else
+					C[i] += A[i*l + k] * Bt[k]; // with tranpose
+				#endif
 			#else
-				accum += A[i*l + k] * B[k]; // without tranpose
+				#if TILLING
+					accum += A[i*l + k] * B[k]; // without tranpose
+				#else
+					C[i] += A[i*l + k] * B[k]; // without tranpose
+				#endif
 			#endif
 	    }
-		C[i] = accum;
+		#if TILLING
+			C[i] = accum;
+		#endif
 	}
 	
 	return NULL;
