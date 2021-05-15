@@ -1,0 +1,1 @@
+sbatch run_naive11.sh & sbatch run_naive12.sh & sbatch run_transpuesto11.sh & sbatch run_transpuesto12.sh & sbatch run_blocktiling11.sh & sbatch run_blocktiling12.sh 
