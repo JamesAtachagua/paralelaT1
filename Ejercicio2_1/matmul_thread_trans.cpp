@@ -10,7 +10,7 @@
 /* To set if execute with tranpose or not */
 #define TRANS         1
 /* To set if execute with block tilling or not */
-#define TILLING       0
+#define TILLING       1
 
 /*
 Para comparar
@@ -23,7 +23,7 @@ tercer punto => TRANS 1, TILLING 1
 Para obtener el menor tiempo de ejecución seria usar tantos Thread
 como filas existan, sin embargo, el CPU tiene una limitación de #cores
 */
-#define MAX_THREAD  4
+#define MAX_THREAD  8
 
 /*
 Set the power of two
@@ -31,7 +31,7 @@ Eg.
     - 2^11 = 2048
     - 2^12 = 4096
 */
-#define MAX         11
+#define MAX         13
 
 /* Set the size of matrix */
 const uint64_t m=1 <<MAX;
