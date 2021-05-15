@@ -11,7 +11,7 @@
 /* To set if execute with tranpose or not */
 #define TRANS         1
 /* To set if execute with block tilling or not */
-#define TILLING       0
+#define TILLING       1
 
 /*
 primer punto => TRANS 1, TILLING 0
@@ -31,7 +31,7 @@ Eg.
     - 2^11 = 2048
     - 2^12 = 4096
 */
-#define MAX         11
+#define MAX         13
 
 /* Set the size of matrix */
 const uint64_t m=1 <<MAX;

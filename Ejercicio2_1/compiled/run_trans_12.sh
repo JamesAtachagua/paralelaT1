@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J trans_4096 # nombre del job
 #SBATCH -N 1 # numero de nodos
-#SBATCH --cpus-per-task=32 # numero de cores
+#SBATCH --cpus-per-task=8 # numero de cores
 #SBATCH --tasks-per-node=1 # numero de tasks por nodo
 #SBATCH --output=log_trans_4096 # numero de tasks por nodo
 
